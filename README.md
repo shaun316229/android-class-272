@@ -1,2 +1,4 @@
 # android-class-272
-ghfuf
+This project for android class 272 tutorial
+
+license:for any purpose
