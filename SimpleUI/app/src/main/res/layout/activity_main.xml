@@ -48,17 +48,17 @@
         android:layout_below="@+id/editText">
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Black Tea"
+            android:layout_width="134dp"
+            android:layout_height="111dp"
             android:id="@+id/blacktearadiobutton"
+            android:drawableRight="@drawable/blacktea"
             android:checked="true" />
 
         <RadioButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Green Tea"
+            android:layout_height="match_parent"
             android:id="@+id/greentearadioButton2"
+            android:drawableRight="@drawable/greentea"
             android:layout_gravity="center_horizontal"
             android:checked="false" />
     </RadioGroup>
