@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="storeInfo">
+        <item>立寧店</item>
+        <item>秀衾店</item>
+        <item>偲華店</item>
+        <item>雨婕店</item>
+        <item>淨山店</item>
+    </string-array>
+</resources>
