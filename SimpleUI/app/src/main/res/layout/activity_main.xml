@@ -28,7 +28,9 @@
         android:onClick="click"
         android:textStyle="bold"
         android:textSize="18dp"
-        android:layout_below="@+id/spinner" />
+        android:layout_below="@+id/spinner"
+        android:background="@drawable/button"/>
+
 
     <EditText
         android:layout_width="match_parent"
