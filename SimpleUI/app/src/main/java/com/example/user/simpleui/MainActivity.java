@@ -1,5 +1,6 @@
 package com.example.user.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -118,6 +119,13 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
 
 
+    }
+
+    public void goToMenu(View view)
+    {
+        Intent intent = new Intent();//兩個Activity要互相溝通
+        intent.setClass(this,DrinkMenuActivity.class);//設定哪個Activity要到哪個Activity
+        startActivity(intent);//drinkmenuActivity會被疊在MainActivity上
     }
 
     @Override
