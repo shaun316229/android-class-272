@@ -1,8 +1,11 @@
 package com.example.user.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,7 +21,8 @@ public class DrinkMenuActivity extends AppCompatActivity {
     int[] IPrices = {35,45,55,45};
     int[] mPrices = {25,35,45,35};
     int[] imageIds = {R.drawable.drink1,R.drawable.drink2,R.drawable.drink3,R.drawable.drink4};
-    
+    int total =0;
+
     List<Drink> drinkList = new ArrayList<>();
 
     @Override
@@ -30,6 +34,15 @@ public class DrinkMenuActivity extends AppCompatActivity {
 
         drinkMenuListView = (ListView)findViewById(R.id.drinkmenulistView);
         totalTextView = (TextView)findViewById(R.id.totaltextview);
+
+        drinkMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Drink drink = (Drink)parent.getAdapter().getItem(position);
+                total+=drink.mPrice;
+                totalTextView.setText(String.valueOf(total));
+            }
+        });
         
         setupDrinkMenu();
 
@@ -53,6 +66,16 @@ public class DrinkMenuActivity extends AppCompatActivity {
     {
         DrinkAdapter adapter = new DrinkAdapter(this,drinkList);
         drinkMenuListView.setAdapter(adapter);
+    }
+
+    public  void done(View view)
+    {
+        Intent intent = new Intent();
+        intent.putExtra("result",String.valueOf(total));
+
+        setResult(RESULT_OK,intent);
+        finish();
+
     }
     @Override
     protected void onStart() {

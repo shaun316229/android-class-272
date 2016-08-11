@@ -15,21 +15,21 @@ import java.util.List;
  */
 public class DrinkAdapter extends BaseAdapter {
 
-    List<Drink> drinks;
-    LayoutInflater layoutInflater;
+    List<Drink> drinkList;
+    LayoutInflater inflater;
 
-    public DrinkAdapter(Context context,List<Drink>drinkList){
-        this.drinks = drinkList;
-        this.layoutInflater = LayoutInflater.from(context);
+    public DrinkAdapter(Context context,List<Drink>drinks){
+        this.drinkList = drinks;
+        inflater = LayoutInflater.from(context);
     }
     @Override
     public int getCount() {
-        return drinks.size();
+        return drinkList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return drinks.get(position);
+        return drinkList.get(position);
     }
 
     @Override
@@ -44,20 +44,12 @@ public class DrinkAdapter extends BaseAdapter {
 
         if(convertView == null)
         {
-            convertView = layoutInflater.inflate(R.layout.listview_order_item,null);
-
-            TextView drinkNametextView = (TextView)convertView.findViewById(R.id.drinkNametextView);
-            TextView mPricetextView = (TextView)convertView.findViewById(R.id.mPricetextView);
-            TextView lPricetextView = (TextView)convertView.findViewById(R.id.lPricetextView);
-            ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
-
+            convertView = inflater.inflate(R.layout.listview_drink_item,null);
             holder = new Holder();
-
-            holder. drinkNametextView =  drinkNametextView;
-            holder.mPricetextView= mPricetextView;
-            holder.lPricetextView = lPricetextView;
-            holder.imageView = imageView;
-
+            holder.drinkNametextView = (TextView)convertView.findViewById(R.id.drinkNametextView);
+            holder.mPricetextView = (TextView)convertView.findViewById(R.id.mPricetextView);
+            holder.lPricetextView = (TextView)convertView.findViewById(R.id.lPricetextView);
+            holder.imageView = (ImageView)convertView.findViewById(R.id.imageView);
             convertView.setTag(holder);
         }
         else
@@ -65,7 +57,7 @@ public class DrinkAdapter extends BaseAdapter {
             holder = (Holder)convertView.getTag();//拿到order
         }
 
-        Drink drink = drinks.get(position);//拿出資料
+        Drink drink = drinkList.get(position);//拿出資料
         holder.drinkNametextView.setText(drink.name);//
         holder.mPricetextView.setText(String.valueOf(drink.mPrice));
         holder.lPricetextView.setText(String.valueOf(drink.IPrice));

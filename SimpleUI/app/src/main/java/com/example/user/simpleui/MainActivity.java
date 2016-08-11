@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    static final  int REQUEST_CODE_DRINK_MENU_ACTIVITY = 0;
     TextView textview;
     EditText editText;
     RadioGroup radioGroup;
@@ -125,7 +126,20 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent();//兩個Activity要互相溝通
         intent.setClass(this,DrinkMenuActivity.class);//設定哪個Activity要到哪個Activity
-        startActivity(intent);//drinkmenuActivity會被疊在MainActivity上
+        startActivityForResult(intent,REQUEST_CODE_DRINK_MENU_ACTIVITY);//drinkmenuActivity會被疊在MainActivity上
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                String result = data.getStringExtra("result");
+                Toast.makeText(this,result,Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
