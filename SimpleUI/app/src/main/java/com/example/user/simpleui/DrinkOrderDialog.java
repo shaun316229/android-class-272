@@ -27,9 +27,7 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private  Drink drink;
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,11 +44,10 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
      * @return A new instance of fragment DrinkOrderDialog.
      */
     // TODO: Rename and change types and number of parameters
-    public static DrinkOrderDialog newInstance(String param1, String param2) {
+    public static DrinkOrderDialog newInstance(Drink drink) {
         DrinkOrderDialog fragment = new DrinkOrderDialog();
         Bundle args = new Bundle();//會有我需要攜帶的變數
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(ARG_PARAM1,drink);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,7 +73,7 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
 
         if(getArguments() != null)
         {
-
+            drink = getArguments().getParcelable(ARG_PARAM1);
         }
 
         View contentView = getActivity().getLayoutInflater().inflate(R.layout.fragment_drink_order_dialog,null);
@@ -84,7 +81,7 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setView(contentView)
-                .setTitle("Hello Dialog")
+                .setTitle(drink.name)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

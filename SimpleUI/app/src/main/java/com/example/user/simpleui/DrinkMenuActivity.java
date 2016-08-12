@@ -89,7 +89,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         FragmentTransaction ft = fragmentManager.beginTransaction();//要開啟一筆交易
 
-        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance("","");
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(drink);
 
 //        ft.replace(R.id.root,dialog);
 //
