@@ -28,6 +28,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     int total =0;
 
     List<Drink> drinkList = new ArrayList<>();
+    List<DrinkOrder> drinkOrderList = new ArrayList<>();//新增存修改資料
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +95,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 //        ft.replace(R.id.root,dialog);
 //
 //        ft.commit();
-        dialog.show(ft,"DrinkOrderDialog");//自動把trancelation做commit
+        dialog.show(ft, "DrinkOrderDialog");//自動把trancelation做commit
     }
 
     public void cancel(View view)
@@ -140,7 +141,20 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onDrinkOrderResult(DrinkOrder drinkOrder) {
+        drinkOrderList.add(drinkOrder);
+        updateTotalTextView();
 
+    }
+
+    private  void updateTotalTextView()//把飲料訂單拿出來作加總
+    {
+        int total = 0;
+        for(DrinkOrder drinkOrder : drinkOrderList)
+        {
+            total += drinkOrder.INumber*drinkOrder.drink.IPrice + drinkOrder.mNumber*drinkOrder.drink.mPrice;
+        }
+
+        totalTextView.setText(String.valueOf(total));
     }
 }

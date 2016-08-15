@@ -8,9 +8,11 @@ import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 
 /**
@@ -26,6 +28,12 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    NumberPicker mNumberPicker;
+    NumberPicker INumberPicker;
+    RadioGroup iceRadioGroup;
+    RadioGroup sugarRadioGroup;
+    EditText noteEditText;
 
     private  Drink drink;
 
@@ -85,6 +93,17 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        DrinkOrder drinkOrder = new DrinkOrder(drink);
+                        drinkOrder.mNumber = mNumberPicker.getValue();
+                        drinkOrder.INumber = INumberPicker.getValue();
+                        drinkOrder.ice = getSelectedTextFromRadioGroup(iceRadioGroup);
+                        drinkOrder.suger = getSelectedTextFromRadioGroup(sugarRadioGroup);
+                        drinkOrder.note = noteEditText.getText().toString();
+
+                        if(mListener != null)
+                        {
+                            mListener.onDrinkOrderResult(drinkOrder);
+                        }
 
                     }
                 })
@@ -94,15 +113,36 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
 
                     }
                 });
+
+        mNumberPicker = (NumberPicker)contentView.findViewById(R.id.MnumberPicker);
+        INumberPicker =  (NumberPicker)contentView.findViewById(R.id.LnumberPicker);
+        iceRadioGroup = (RadioGroup)contentView.findViewById(R.id.iceradioGroup);
+        sugarRadioGroup = (RadioGroup)contentView.findViewById(R.id.sugarradioGroup);
+        noteEditText = (EditText)contentView.findViewById(R.id.noteEditText);
+
+
+        mNumberPicker.setMaxValue(100);
+        mNumberPicker.setMinValue(0);
+
+        INumberPicker.setMaxValue(100);
+        INumberPicker.setMinValue(0);
+
         return builder.create();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {//到底有沒有這個人存在
-            mListener.onFragmentInteraction(uri);
-        }
+    private String getSelectedTextFromRadioGroup(RadioGroup radioGroup)
+    {
+        int id = radioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton= (RadioButton)radioGroup.findViewById(id);
+        return radioButton.getText().toString();
     }
+
+    // TODO: Rename method, update argument and hook method into UI event
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {//到底有沒有這個人存在
+//            mListener.onDrinkOrderResult(uri);
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {//context等於activity 溝通橋樑
@@ -133,6 +173,6 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
      */
     public interface OnFragmentInteractionListener {//定義介面，下面有很多事情，要會做才能溝通
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onDrinkOrderResult(DrinkOrder drinkOrder);
     }
 }
