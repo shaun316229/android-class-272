@@ -86,11 +86,25 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     private  void showDrinkOrderDialog(Drink drink)
     {
+        DrinkOrder order = null;
+        for(DrinkOrder drinkOrder : drinkOrderList)
+        {
+            if(drinkOrder.drink.name.equals(drink.name))//已經有訂單就復原
+            {
+                order = drinkOrder;
+                break;
+            }
+        }
+        if(order == null)
+        {
+            order = new DrinkOrder(drink);
+        }
+
         FragmentManager fragmentManager = getFragmentManager();
 
         FragmentTransaction ft = fragmentManager.beginTransaction();//要開啟一筆交易
 
-        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(drink);
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(order);
 
 //        ft.replace(R.id.root,dialog);
 //
@@ -101,7 +115,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     public void cancel(View view)
     {
         Intent intent = new Intent();
-        setResult(RESULT_CANCELED,intent);
+        setResult(RESULT_CANCELED, intent);
         finish();
     }
     @Override
@@ -142,7 +156,19 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     @Override
     public void onDrinkOrderResult(DrinkOrder drinkOrder) {
-        drinkOrderList.add(drinkOrder);
+        boolean flag = false;
+
+        for(int i = 0;i <drinkOrderList.size() ; i++)//跑過已經有的訂單
+        {
+            if(drinkOrderList.get(i).drink.name.equals(drinkOrder.drink.name))//是否有重複
+            {
+                drinkOrderList.set(i,drinkOrder);
+                flag = true;
+                break;
+            }
+        }
+        if(!flag)
+            drinkOrderList.add(drinkOrder);
         updateTotalTextView();
 
     }

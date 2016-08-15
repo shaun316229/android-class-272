@@ -35,7 +35,7 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
     RadioGroup sugarRadioGroup;
     EditText noteEditText;
 
-    private  Drink drink;
+    private  DrinkOrder drinkOrder;
 
     private OnFragmentInteractionListener mListener;
 
@@ -52,10 +52,10 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
      * @return A new instance of fragment DrinkOrderDialog.
      */
     // TODO: Rename and change types and number of parameters
-    public static DrinkOrderDialog newInstance(Drink drink) {
+    public static DrinkOrderDialog newInstance(DrinkOrder drinkOrder) {
         DrinkOrderDialog fragment = new DrinkOrderDialog();
         Bundle args = new Bundle();//會有我需要攜帶的變數
-        args.putParcelable(ARG_PARAM1,drink);
+        args.putParcelable(ARG_PARAM1,drinkOrder);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,7 +81,7 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
 
         if(getArguments() != null)
         {
-            drink = getArguments().getParcelable(ARG_PARAM1);
+           this.drinkOrder = getArguments().getParcelable(ARG_PARAM1);
         }
 
         View contentView = getActivity().getLayoutInflater().inflate(R.layout.fragment_drink_order_dialog,null);
@@ -89,11 +89,10 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setView(contentView)
-                .setTitle(drink.name)
+                .setTitle(drinkOrder.drink.name)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DrinkOrder drinkOrder = new DrinkOrder(drink);
                         drinkOrder.mNumber = mNumberPicker.getValue();
                         drinkOrder.INumber = INumberPicker.getValue();
                         drinkOrder.ice = getSelectedTextFromRadioGroup(iceRadioGroup);
@@ -123,9 +122,15 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
 
         mNumberPicker.setMaxValue(100);
         mNumberPicker.setMinValue(0);
+        mNumberPicker.setValue(drinkOrder.mNumber);
 
         INumberPicker.setMaxValue(100);
         INumberPicker.setMinValue(0);
+        INumberPicker.setValue(drinkOrder.INumber);
+
+        noteEditText.setText(drinkOrder.note);
+        setSelectedTextInRadioGroup(drinkOrder.ice,iceRadioGroup);
+        setSelectedTextInRadioGroup(drinkOrder.suger,sugarRadioGroup);
 
         return builder.create();
     }
@@ -135,6 +140,27 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
         int id = radioGroup.getCheckedRadioButtonId();
         RadioButton radioButton= (RadioButton)radioGroup.findViewById(id);
         return radioButton.getText().toString();
+    }
+
+    private  void setSelectedTextInRadioGroup(String selectedText, RadioGroup radioGroup)
+    {
+        int count = radioGroup.getChildCount();
+        for(int i =0; i<count ;i++)
+        {
+            View view = radioGroup.getChildAt(i);
+            if(view instanceof  RadioButton)
+            {
+                RadioButton radioButton = (RadioButton)view;
+                if(radioButton.getText().toString().equals(selectedText))
+                {
+                    radioButton.setChecked(true);
+                }
+                else
+                {
+                    radioButton.setChecked(false);
+                }
+            }
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
