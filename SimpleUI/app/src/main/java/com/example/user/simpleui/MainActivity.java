@@ -54,7 +54,19 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("UIState",MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        editText.setText(sharedPreferences.getString("editText",""));
+        spinner.setSelection(sharedPreferences.getInt(spinner));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                editor.putInt(......)
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        editText.setText(sharedPreferences.getString("editText", ""));
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
