@@ -1,8 +1,12 @@
 package com.example.user.simpleui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.EditTextPreference;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +35,11 @@ public class MainActivity extends AppCompatActivity {
     Spinner spinner;
     String drink="Black Tea";
 
+    ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
     List<Order> data = new ArrayList<>();
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +50,29 @@ public class MainActivity extends AppCompatActivity {
         radioGroup=(RadioGroup)findViewById(R.id.radiogroup);
         listView=(ListView)findViewById(R.id.listView);
         spinner=(Spinner)findViewById(R.id.spinner);
+
+        sharedPreferences = getSharedPreferences("UIState",MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        editText.setText(sharedPreferences.getString("editText",""));
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editor.putString("editText",editText.getText().toString());
+                editor.apply();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -113,10 +144,12 @@ public class MainActivity extends AppCompatActivity {
         Order order = new Order();
 
         order.note = text;
-        order.drink = drink;
+        order.drinkOrderList = drinkOrderList;
         order.storeInfo = (String)spinner.getSelectedItem();
 
         data.add(order);
+
+        drinkOrderList = new ArrayList<>();
         setupListView();
 
 
@@ -125,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
     public void goToMenu(View view)
     {
         Intent intent = new Intent();//兩個Activity要互相溝通
+        intent.putExtra("result",drinkOrderList);
         intent.setClass(this,DrinkMenuActivity.class);//設定哪個Activity要到哪個Activity
         startActivityForResult(intent,REQUEST_CODE_DRINK_MENU_ACTIVITY);//drinkmenuActivity會被疊在MainActivity上
     }
@@ -136,8 +170,8 @@ public class MainActivity extends AppCompatActivity {
         {
             if(resultCode == RESULT_OK)
             {
-                String result = data.getStringExtra("result");
-                Toast.makeText(this,result,Toast.LENGTH_LONG).show();
+                drinkOrderList = data.getParcelableArrayListExtra("result");
+//                Toast.makeText(this,result,Toast.LENGTH_LONG).show();
             }
             else
             {

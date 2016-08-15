@@ -28,7 +28,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     int total =0;
 
     List<Drink> drinkList = new ArrayList<>();
-    List<DrinkOrder> drinkOrderList = new ArrayList<>();//新增存修改資料
+    ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();//新增存修改資料
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,14 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         setdata();
 
+        Intent intent = getIntent();
+        drinkOrderList = intent.getParcelableArrayListExtra("result");
+
+
         drinkMenuListView = (ListView)findViewById(R.id.drinkmenulistView);
         totalTextView = (TextView)findViewById(R.id.totaltextview);
+
+        updateTotalTextView();
 
         drinkMenuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -77,7 +83,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     public  void done(View view)
     {
         Intent intent = new Intent();
-        intent.putExtra("result",String.valueOf(total));
+        intent.putExtra("result",drinkOrderList);
 
         setResult(RESULT_OK,intent);
         finish();
