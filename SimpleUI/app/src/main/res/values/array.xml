@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="storeInfo">
-        <item>立寧店</item>
-        <item>秀衾店</item>
-        <item>偲華店</item>
-        <item>雨婕店</item>
-        <item>淨山店</item>
+        <item>台大店</item>
+        <item>西門店</item>
+        <item>復興店</item>
+        <item>輔大店</item>
+        <item>公館店</item>
     </string-array>
 </resources>
