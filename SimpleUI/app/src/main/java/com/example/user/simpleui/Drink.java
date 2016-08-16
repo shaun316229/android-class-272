@@ -3,13 +3,20 @@ package com.example.user.simpleui;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 /**
  * Created by user on 2016/8/11.
  */
-public class Drink implements Parcelable {
-    String name;
-    int mPrice;
-    int IPrice;
+@ParseClassName("Drink")
+public class Drink extends ParseObject implements Parcelable {
+//    String name;
+//    int mPrice;
+//    int IPrice;
+    static final String Name_COL = "name";
+    static final String MPRICE_COL = "mPrice";
+    static final  String LPRICE_COL ="IPrice";
     int imageId;
 
     @Override
@@ -19,9 +26,9 @@ public class Drink implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {//物件要怎麼打包
-        dest.writeString(this.name);
-        dest.writeInt(this.mPrice);
-        dest.writeInt(this.IPrice);
+        dest.writeString(this.getName());
+        dest.writeInt(this.getmPrice());
+        dest.writeInt(this.getIPrice());
         dest.writeInt(this.imageId);
     }
 
@@ -29,9 +36,9 @@ public class Drink implements Parcelable {
     }
 
     protected Drink(Parcel in) {//包裹讀出來 要塞回物件
-        this.name = in.readString();
-        this.mPrice = in.readInt();
-        this.IPrice = in.readInt();
+        this.setName(in.readString());
+        this.setmPrice(in.readInt());
+        this.setIPrice(in.readInt());
         this.imageId = in.readInt();
     }
 
@@ -46,4 +53,28 @@ public class Drink implements Parcelable {
             return new Drink[size];
         }
     };
+
+    public String getName() {
+        return getString(Name_COL);
+    }
+
+    public void setName(String name) {
+        this.put(Name_COL,name);
+    }
+
+    public int getmPrice() {
+        return getInt(MPRICE_COL);
+    }
+
+    public void setmPrice(int mPrice) {
+        this.put(MPRICE_COL,mPrice);
+    }
+
+    public int getIPrice() {
+        return getInt(LPRICE_COL);
+    }
+
+    public void setIPrice(int IPrice) {
+        this.put(LPRICE_COL,IPrice);
+    }
 }

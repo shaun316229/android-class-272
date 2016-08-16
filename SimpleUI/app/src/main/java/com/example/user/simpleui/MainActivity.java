@@ -112,16 +112,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });//上傳到所連結的server
 
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if(e == null)
-                {
-                    Toast.makeText(MainActivity.this,objects.get(0).getString("foo"),Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if(e == null)
+//                {
+//                    Toast.makeText(MainActivity.this,objects.get(0).getString("foo"),Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+
         Log.d("DEBUG","MainActivity OnCreate");
     }
 
