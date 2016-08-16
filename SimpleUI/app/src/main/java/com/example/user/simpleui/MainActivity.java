@@ -2,7 +2,6 @@ package com.example.user.simpleui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.EditTextPreference;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,15 +13,20 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     String drink="Black Tea";
 
     ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
-    List<Order> data = new ArrayList<>();
+    List<Order> orderList = new ArrayList<>();
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -51,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         listView=(ListView)findViewById(R.id.listView);
         spinner=(Spinner)findViewById(R.id.spinner);
 
-        sharedPreferences = getSharedPreferences("UIState",MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("UIState", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
 
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                editor.putString("editText",editText.getText().toString());
+                editor.putString("editText", editText.getText().toString());
                 editor.apply();
 
             }
@@ -80,8 +84,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.blacktearadiobutton) {
                     drink = "Black Tea";
-                } else if (checkedId == R.id.greentearadioButton2)
-                {
+                } else if (checkedId == R.id.greentearadioButton2) {
                     drink = "Green Tea";
                 }
             }
@@ -95,19 +98,62 @@ public class MainActivity extends AppCompatActivity {
             }
         });//item事件處發
 
+        setupOrderHistory();
         setupListView();
         setupSpinner();
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Toast.makeText(MainActivity.this, "Sucess", Toast.LENGTH_LONG).show();
+                }
+            }
+        });//上傳到所連結的server
 
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                if(e == null)
+                {
+                    Toast.makeText(MainActivity.this,objects.get(0).getString("foo"),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
         Log.d("DEBUG","MainActivity OnCreate");
+    }
+
+    private void setupOrderHistory()
+    {
+        String orderDatas = Utils.readFile(this,"history");
+        String[] orderDataArray = orderDatas.split("\n");
+        Gson gson = new Gson();
+        for(String orderData : orderDataArray)
+        {
+            try
+            {
+                Order order = gson.fromJson(orderData,Order.class);
+                if(order != null)
+                {
+                    orderList.add(order);
+                }
+            }
+            catch (JsonSyntaxException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setupListView()
     {
-//        String[] data=new String[]{"1","2","3","4","5","6","7","8"};
+//        String[] orderList=new String[]{"1","2","3","4","5","6","7","8"};
 
 //      List<Map<String,String>> mapList = new ArrayList<>();
 //
-//        for (Order order : data)
+//        for (Order order : orderList)
 //        {
 //            Map<String,String> item = new HashMap<>();
 //
@@ -123,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        SimpleAdapter adapter = new SimpleAdapter(this,mapList,R.layout.listview_order_item,from,to);
 
-        OrderAdapter adapter = new OrderAdapter(this,data);
+        OrderAdapter adapter = new OrderAdapter(this, orderList);
         listView.setAdapter(adapter);
     }
 
@@ -132,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
         String[] storeInfo = getResources().getStringArray(R.array.storeInfo);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,storeInfo);
         spinner.setAdapter(adapter);
-        spinner.setSelection(sharedPreferences.getInt("spinner", 0));
+        spinner.setSelection(sharedPreferences.getInt("spinner", 0));//要先設定才拿得到東西
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -161,7 +207,11 @@ public class MainActivity extends AppCompatActivity {
         order.drinkOrderList = drinkOrderList;
         order.storeInfo = (String)spinner.getSelectedItem();
 
-        data.add(order);
+        orderList.add(order);
+
+        Gson gson = new Gson();
+        String orderData = gson.toJson(order);
+        Utils.writeFile(this,"history",orderData+'\n');
 
         drinkOrderList = new ArrayList<>();
         setupListView();
