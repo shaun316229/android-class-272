@@ -89,7 +89,7 @@ public class DrinkOrderDialog extends DialogFragment {//繼承
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setView(contentView)
-                .setTitle(drinkOrder.drink.name)
+                .setTitle(drinkOrder.drink.getName())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
