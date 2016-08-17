@@ -109,7 +109,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         DrinkOrder order = null;
         for(DrinkOrder drinkOrder : drinkOrderList)
         {
-            if(drinkOrder.drink.getObjectId().equals(drink.getObjectId()))//已經有訂單就復原
+            if(drinkOrder.getDrink().getObjectId().equals(drink.getObjectId()))//已經有訂單就復原
             {
                 order = drinkOrder;
                 break;
@@ -180,7 +180,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         for(int i = 0;i <drinkOrderList.size() ; i++)//跑過已經有的訂單
         {
-            if(drinkOrderList.get(i).drink.getObjectId().equals(drinkOrder.drink.getObjectId()))//是否有重複
+            if(drinkOrderList.get(i).getDrink().getObjectId().equals(drinkOrder.getDrink().getObjectId()))//是否有重複
             {
                 drinkOrderList.set(i,drinkOrder);
                 flag = true;
@@ -198,7 +198,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         int total = 0;
         for(DrinkOrder drinkOrder : drinkOrderList)
         {
-            total += drinkOrder.INumber*drinkOrder.drink.getIPrice() + drinkOrder.mNumber*drinkOrder.drink.getmPrice();
+            total += drinkOrder.getINumber()*drinkOrder.getDrink().getIPrice() + drinkOrder.getmNumber()*drinkOrder.getDrink().getmPrice();
         }
 
         totalTextView.setText(String.valueOf(total));
