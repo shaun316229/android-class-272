@@ -128,24 +128,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupOrderHistory()
     {
-        String orderDatas = Utils.readFile(this,"history");
-        String[] orderDataArray = orderDatas.split("\n");
-        Gson gson = new Gson();
-        for(String orderData : orderDataArray)
-        {
-            try
-            {
-                Order order = gson.fromJson(orderData,Order.class);
-                if(order != null)
-                {
-                    orderList.add(order);
-                }
-            }
-            catch (JsonSyntaxException e)
-            {
-                e.printStackTrace();
-            }
-        }
+//        String orderDatas = Utils.readFile(this,"history");
+//        String[] orderDataArray = orderDatas.split("\n");
+//        Gson gson = new Gson();
+//        for(String orderData : orderDataArray)
+//        {
+//            try
+//            {
+//                Order order = gson.fromJson(orderData,Order.class);
+//                if(order != null)
+//                {
+//                    orderList.add(order);
+//                }
+//            }
+//            catch (JsonSyntaxException e)
+//            {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     private void setupListView()
