@@ -3,11 +3,15 @@ package com.example.user.simpleui;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import java.util.List;
 
 /**
  * Created by user on 2016/8/11.
@@ -115,11 +119,31 @@ public class Drink extends ParseObject implements Parcelable {
     public static Drink getDrinkFromCache(String objectId)
     {
         try {
-            Drink drink = getQuery().setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK).get(objectId);
+            Drink drink = getQuery().fromLocalDatastore().get(objectId);
             return drink;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return Drink.createWithoutData(Drink.class,objectId);//最重要objectId
+        return Drink.createWithoutData(Drink.class, objectId);//最重要objectId
+    }
+
+    public static void getDrinksFromLocalThenRemote(final FindCallback<Drink> callback)//第一次先從local端拿，再拿remote端
+    {
+        getQuery().fromLocalDatastore().findInBackground(callback);
+        getQuery().findInBackground(new FindCallback<Drink>() {
+            @Override
+            public void done(final List<Drink> list, ParseException e) {
+                if(e == null)
+                {
+                    unpinAllInBackground("Drink", new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            pinAllInBackground("Drink",list);
+                        }
+                    });
+                }
+                callback.done(list, e);//有一個faction有done
+            }
+        });
     }
 }

@@ -20,6 +20,7 @@ public class SUIApplication extends Application {
                         .applicationId("d3EhgjkTXd6moT0iLrjGD9Zgp9Wdk0SO6pwO3T22")
                         .server("https://parseapi.back4app.com/")
                         .clientKey("fjq21kEOPiLBV7TuiA8Ea456FYvfhI53wMsmI0s7")
+                                .enableLocalDataStore()
                         .build()
         );
 
