@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DrinkMenuActivity"></activity>
+        <activity android:name=".DrinkMenuActivity" />
+        <activity android:name=".OrderDetalActivity"></activity>
     </application>
 
 </manifest>

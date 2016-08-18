@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
+                goToDetal(order);
 //                Toast.makeText(MainActivity.this, order.note, Toast.LENGTH_LONG).show();//這裡的this是指向MainActivity
             }
         });//item事件處發
@@ -246,6 +247,14 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("result",drinkOrderList);
         intent.setClass(this,DrinkMenuActivity.class);//設定哪個Activity要到哪個Activity
         startActivityForResult(intent,REQUEST_CODE_DRINK_MENU_ACTIVITY);//drinkmenuActivity會被疊在MainActivity上
+    }
+
+    public void goToDetal(Order order)
+    {
+        Intent intent = new Intent();
+        intent.putExtra("order",order);
+        intent.setClass(this,OrderDetalActivity.class);
+        startActivity(intent);
     }
 
     @Override
