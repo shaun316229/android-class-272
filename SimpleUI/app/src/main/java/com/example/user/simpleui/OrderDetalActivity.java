@@ -33,28 +33,29 @@ public class OrderDetalActivity extends AppCompatActivity {
             resultText+=drinkName + "  M:" + mNumber + "  L:" + INumber + "\n";
         }
         drinkOrderResultsTextView.setText(resultText);
+        (new GeoCodingTask()).execute("");
 
-        final Handler handler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                latlngTextView.setText("123,456");
-                return false;
-            }
-        });
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                        try{
-                            Thread.sleep(1000);
-//                            latlngTextView.setText("123,456");
-                            handler.sendMessage(new Message());
-                        }catch(InterruptedException e) {
-                            e.printStackTrace();
-                        }
-            }
-        });
-
-        thread.start();
+//        final Handler handler = new Handler(new Handler.Callback() {
+//            @Override
+//            public boolean handleMessage(Message msg) {
+//                latlngTextView.setText("123,456");
+//                return false;
+//            }
+//        });
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                        try{
+//                            Thread.sleep(1000);
+////                            latlngTextView.setText("123,456");
+//                            handler.sendMessage(new Message());
+//                        }catch(InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//            }
+//        });
+//
+//        thread.start();
     }
 
 }
