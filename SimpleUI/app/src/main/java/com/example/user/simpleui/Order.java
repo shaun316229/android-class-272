@@ -97,7 +97,8 @@ public class Order extends ParseObject implements Parcelable{
             dest.writeInt(0);
             dest.writeString(getNote());
             dest.writeString(getStoreInfo());
-            dest.writeParcelableArray((Parcelable[]) getDrinkOrderList().toArray(), flags);
+//            dest.writeParcelableArray((Parcelable[]) getDrinkOrderList().toArray(), flags);
+            dest.writeTypedList(getDrinkOrderList());
         }
         else
         {
@@ -110,7 +111,10 @@ public class Order extends ParseObject implements Parcelable{
         super();
         this.setNote(in.readString());
         this.setStoreInfo(in.readString());
-        this.setDrinkOrderList(Arrays.asList((DrinkOrder[]) in.readArray(DrinkOrder.class.getClassLoader())));
+//        this.setDrinkOrderList(Arrays.asList((DrinkOrder[]) in.readArray(DrinkOrder.class.getClassLoader())));
+        ArrayList<DrinkOrder> drinkOrders = new ArrayList<>();
+        in.readTypedList(drinkOrders,DrinkOrder.CREATOR);
+        this.setDrinkOrderList(drinkOrders);
     }
 
     public static final Parcelable.Creator<Order> CREATOR = new Parcelable.Creator<Order>() {
